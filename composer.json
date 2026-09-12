@@ -1,0 +1,13 @@
+{
+    "name": "payzum/fluent-forms-payzum",
+    "description": "Payzum (crypto & stablecoin, non-custodial) payment method for Fluent Forms",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "payzum/payzum-php": "^0.1"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

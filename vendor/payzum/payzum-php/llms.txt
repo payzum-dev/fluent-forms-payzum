@@ -1,0 +1,43 @@
+# payzum/payzum-php (PHP SDK)
+
+> Official PHP SDK for Payzum, a multi-chain crypto payment processor. Create
+> invoices, read buyer status with exact decimals, and verify the three
+> families of signed webhooks — with the signature header names fixed
+> internally so they cannot be misconfigured.
+
+Install: `composer require payzum/payzum-php` (PHP ≥ 8.1, ext-curl, zero
+runtime dependencies).
+
+## Start here
+- Quickstart and webhook handler examples: README.md in this repository
+- Full platform reference for agents (REST, webhooks, payouts, x402):
+  https://merchant.payzum.com/llms-full.txt — SDK quickstarts are its §0
+- API docs for humans: https://merchant.payzum.com/docs
+
+## What the SDK guarantees
+- Webhook verification: `verifyPaymentIpn` (HMAC-SHA-512, `x-nowpayments-sig`),
+  `verifyCoinPaymentsIpn` (HMAC-SHA-512, `HMAC`, form-encoded),
+  `verifyMassPayout` (HMAC-SHA-256, `X-Payzum-Signature`). Constant-time
+  compare, raw-bytes verification, 10-minute replay window where the payload
+  carries a timestamp. Do NOT swap headers between families.
+- Amounts never touch a float: `Json::decodeLossless` hands every number back
+  as an exact decimal string; outbound amounts keep every digit you supplied.
+- `Client::createPayment` is never auto-retried without an Idempotency-Key;
+  with one, the retry waits out the API's ~60s idempotency consistency window.
+- All 16 API error codes typed on `ApiException::$errorCode`; only
+  RATE_LIMIT_EXCEEDED, INTERNAL_ERROR and RATE_PROVIDER_DOWN are retried.
+- Canonical `PaymentStatus` enum: waiting | partially_paid | finished |
+  expired | failed, with mappers from both the merchant and buyer vocabularies.
+- The five IPN event types are listed in `Verifier::IPN_EVENT_TYPES`,
+  including the security-relevant `wrong_token_received` and
+  `suspicious_token_received`.
+
+## Environments
+- Production: `https://merchant.payzum.com` (note: `api.payzum.com` does NOT
+  serve the API)
+- Sandbox: `https://staging.payzum.com` — `Payzum::sandbox($apiKey)`
+
+## Siblings
+- Node.js/TypeScript SDK: https://github.com/payzum-dev/payzum-node (`payzum` on npm)
+- Shared OpenAPI contract and signature-vector corpus:
+  https://github.com/payzum-dev/payzum-openapi

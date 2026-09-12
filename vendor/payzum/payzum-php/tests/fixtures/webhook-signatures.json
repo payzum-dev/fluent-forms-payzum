@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "description": "Shared webhook-signature test vectors for all Payzum SDKs. Every case is computed from the gateway signing algorithms; none are hand-written. Bodies are exact UTF-8 strings — sign and verify those bytes verbatim.",
+  "secret": "payzum_test_webhook_secret_do_not_use_in_production",
+  "replay_window_seconds": 600,
+  "schemes": {
+    "payment_ipn": {
+      "algorithm": "HMAC-SHA-512",
+      "encoding": "hex-lowercase",
+      "header": "x-nowpayments-sig",
+      "event_id_header": "x-payzum-event-id",
+      "content_type": "application/json",
+      "body_construction": "recursive alphabetical key sort, then JSON serialize",
+      "timestamp_field": "event_at",
+      "dedup_field": "event_id",
+      "notes": "Header name comes from the NowPayments-compatible dialect. It is FIXED. Do not make it configurable and do not reuse X-Payzum-Signature here.",
+      "cases": [
+        {
+          "name": "valid",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "c325fd67828aa53442884d8ba1dcfbce175238ef95657076eafa5be04eae3d962bfae9eeea9b05ccfc795fb3e22a71250d9b3cf75481ff806fb5214e3dfcd63c",
+          "valid": true
+        },
+        {
+          "name": "valid_uppercase_hex",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "C325FD67828AA53442884D8BA1DCFBCE175238EF95657076EAFA5BE04EAE3D962BFAE9EEEA9B05CCFC795FB3E22A71250D9B3CF75481FF806FB5214E3DFCD63C",
+          "valid": true,
+          "why": "Hex is case-insensitive. Decode to bytes (or lowercase) before comparing."
+        },
+        {
+          "name": "bad_signature",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "0325fd67828aa53442884d8ba1dcfbce175238ef95657076eafa5be04eae3d962bfae9eeea9b05ccfc795fb3e22a71250d9b3cf75481ff806fb5214e3dfcd63c",
+          "valid": false
+        },
+        {
+          "name": "tampered_body",
+          "body": "{\"actually_paid\":4999,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "c325fd67828aa53442884d8ba1dcfbce175238ef95657076eafa5be04eae3d962bfae9eeea9b05ccfc795fb3e22a71250d9b3cf75481ff806fb5214e3dfcd63c",
+          "valid": false,
+          "why": "Amount inflated after signing — must not verify."
+        },
+        {
+          "name": "wrong_algorithm_sha256",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "b7154e1e8f9e98958fdde1acd2e92aee1332f6b0db9d62b8f6e6fbf97bc62a4c",
+          "valid": false,
+          "why": "Mass-payout algorithm applied to a payment IPN."
+        },
+        {
+          "name": "empty_signature",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "",
+          "valid": false
+        },
+        {
+          "name": "truncated_signature",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "c325fd67828aa53442884d8ba1dcfbce175238ef95657076eafa5be04eae3d96",
+          "valid": false,
+          "why": "Compare lengths before any constant-time compare, or it throws."
+        },
+        {
+          "name": "wrong_secret",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "eba9adb9b64ff162c2099a08c29a4252cfea5159747c6d925666173b4a13eb3b01a5d2a25dbb4f38c4026e4ee8b2eec6ec4611a573b728db4116b0b4aa84a4bc",
+          "valid": false
+        }
+      ],
+      "replay_cases": [
+        {
+          "name": "fresh",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000000,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "c325fd67828aa53442884d8ba1dcfbce175238ef95657076eafa5be04eae3d962bfae9eeea9b05ccfc795fb3e22a71250d9b3cf75481ff806fb5214e3dfcd63c",
+          "now": 1788000030,
+          "accept": true
+        },
+        {
+          "name": "stale_beyond_window",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1787999100,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "3f14343e18ccac1ad19aeee53cfdde5a9d0b9691ce0bde89dda5b14f43224c828de98a3c3616f1f4c2a4fa525257d1751d20b28415ae673533b301a57632267e",
+          "now": 1788000000,
+          "accept": false,
+          "why": "event_at is 900s old, window is 600s. Signature is VALID; reject on age."
+        },
+        {
+          "name": "future_beyond_skew",
+          "body": "{\"actually_paid\":49.99,\"amount_received\":49.99,\"created_at\":\"2026-08-28T10:00:00.000Z\",\"event_at\":1788000900,\"event_id\":\"pzie_9a8b7c6d5e4f3a2b1c0d9e8f\",\"invoice_type\":\"payment\",\"network\":\"polygon\",\"order_id\":\"ORDER-12345\",\"pay_amount\":49.99,\"pay_currency\":\"usdcmatic\",\"payment_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"payment_status\":\"finished\",\"price_amount\":49.99,\"price_currency\":\"usd\",\"purchase_id\":\"pzi_c8k2m4p6r8t0v2x4z6b8d0f2\",\"updated_at\":\"2026-08-28T10:04:00.000Z\"}",
+          "signature": "3ccb47d8dfd3615b6015a5892fdac50c2be339d01c7626c9886b562cbc281f3efdfad44e4de6be8a55e24ff11345a728fc4f7d92693776f15432a5ec4b2a2e17",
+          "now": 1788000000,
+          "accept": false,
+          "why": "Clock skew guard: reject timestamps far in the future too."
+        }
+      ],
+      "dedup_case": {
+        "event_id": "pzie_9a8b7c6d5e4f3a2b1c0d9e8f",
+        "why": "Retries reuse the same event_id. Second delivery must be a no-op, not a second fulfilment."
+      }
+    },
+    "coinpayments_ipn": {
+      "algorithm": "HMAC-SHA-512",
+      "encoding": "hex-lowercase",
+      "header": "HMAC",
+      "content_type": "application/x-www-form-urlencoded",
+      "body_construction": "alphabetical key sort, then form-urlencode",
+      "timestamp_field": null,
+      "dedup_field": "ipn_id",
+      "notes": "Delivered to merchants issued CoinPayments keys. THE PAYLOAD CARRIES NO TIMESTAMP, so no replay window is possible — dedup on ipn_id is the only defence. No x-payzum-event-id header is sent for this shape.",
+      "cases": [
+        {
+          "name": "valid",
+          "body": "amount1=49.99000000&amount2=49.99000000&currency1=USD&currency2=USDC.POLY&fee=0.00000000&ipn_id=cp_1a2b3c4d5e6f7a8b9c0d1e2f&ipn_mode=hmac&ipn_type=api&ipn_version=1.0&merchant=pzm_4f3e2d1c0b9a8f7e6d5c4b3a&received_amount=49.99000000&received_confirms=12&status=100&status_text=Payment+complete&txn_id=cptx_7e6d5c4b3a2f1e0d9c8b7a6f",
+          "signature": "00194a49509805cb82767950d64dd20214647decae3b79ab1b97e81fc04cb3cb985b24a722a95cdd1113f521b35325d86d24f0a2f327188bbada456048b09c0b",
+          "valid": true
+        },
+        {
+          "name": "bad_signature",
+          "body": "amount1=49.99000000&amount2=49.99000000&currency1=USD&currency2=USDC.POLY&fee=0.00000000&ipn_id=cp_1a2b3c4d5e6f7a8b9c0d1e2f&ipn_mode=hmac&ipn_type=api&ipn_version=1.0&merchant=pzm_4f3e2d1c0b9a8f7e6d5c4b3a&received_amount=49.99000000&received_confirms=12&status=100&status_text=Payment+complete&txn_id=cptx_7e6d5c4b3a2f1e0d9c8b7a6f",
+          "signature": "10194a49509805cb82767950d64dd20214647decae3b79ab1b97e81fc04cb3cb985b24a722a95cdd1113f521b35325d86d24f0a2f327188bbada456048b09c0b",
+          "valid": false
+        },
+        {
+          "name": "tampered_body",
+          "body": "amount1=49.99000000&amount2=49.99000000&currency1=USD&currency2=USDC.POLY&fee=0.00000000&ipn_id=cp_1a2b3c4d5e6f7a8b9c0d1e2f&ipn_mode=hmac&ipn_type=api&ipn_version=1.0&merchant=pzm_4f3e2d1c0b9a8f7e6d5c4b3a&received_amount=49.99000000&received_confirms=12&status=1&status_text=Payment+complete&txn_id=cptx_7e6d5c4b3a2f1e0d9c8b7a6f",
+          "signature": "00194a49509805cb82767950d64dd20214647decae3b79ab1b97e81fc04cb3cb985b24a722a95cdd1113f521b35325d86d24f0a2f327188bbada456048b09c0b",
+          "valid": false
+        },
+        {
+          "name": "empty_signature",
+          "body": "amount1=49.99000000&amount2=49.99000000&currency1=USD&currency2=USDC.POLY&fee=0.00000000&ipn_id=cp_1a2b3c4d5e6f7a8b9c0d1e2f&ipn_mode=hmac&ipn_type=api&ipn_version=1.0&merchant=pzm_4f3e2d1c0b9a8f7e6d5c4b3a&received_amount=49.99000000&received_confirms=12&status=100&status_text=Payment+complete&txn_id=cptx_7e6d5c4b3a2f1e0d9c8b7a6f",
+          "signature": "",
+          "valid": false
+        }
+      ],
+      "replay_cases": [],
+      "dedup_case": {
+        "ipn_id": "cp_1a2b3c4d5e6f7a8b9c0d1e2f",
+        "why": "Only defence available for this shape — there is no timestamp to age out."
+      }
+    },
+    "mass_payout": {
+      "algorithm": "HMAC-SHA-256",
+      "encoding": "hex-lowercase",
+      "header": "X-Payzum-Signature",
+      "event_id_header": "X-Payzum-Event-Id",
+      "content_type": "application/json",
+      "body_construction": "JSON.stringify as-is — NOT key-sorted, unlike payment_ipn",
+      "timestamp_field": "eventAt",
+      "dedup_field": "eventId",
+      "notes": "camelCase fields, and SHA-256 rather than SHA-512. Event ids are prefixed pzwe_.",
+      "cases": [
+        {
+          "name": "valid",
+          "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":250}}",
+          "signature": "394e03c19434624033aa6b179db0f5ff81f9249b8c334712ab8dda987797786b",
+          "valid": true
+        },
+        {
+          "name": "bad_signature",
+          "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":250}}",
+          "signature": "094e03c19434624033aa6b179db0f5ff81f9249b8c334712ab8dda987797786b",
+          "valid": false
+        },
+        {
+          "name": "wrong_algorithm_sha512",
+          "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":250}}",
+          "signature": "0dc5f5faa2f6ab8f4e9d7e10a0a2b3ee106fcaf5ae3806676115dd8c454fd07c1f733854edef6540b5db90899dbcfb0250417aa1cf934bbc179b389faa158521",
+          "valid": false,
+          "why": "Payment-IPN algorithm applied to a mass-payout webhook."
+        },
+        {
+          "name": "tampered_body",
+          "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":1}}",
+          "signature": "394e03c19434624033aa6b179db0f5ff81f9249b8c334712ab8dda987797786b",
+          "valid": false
+        },
+        {
+          "name": "empty_signature",
+          "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":250}}",
+          "signature": "",
+          "valid": false
+        }
+      ],
+      "replay_cases": [
+        {
+          "name": "fresh",
+          "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":250}}",
+          "signature": "394e03c19434624033aa6b179db0f5ff81f9249b8c334712ab8dda987797786b",
+          "now": 1788000030,
+          "accept": true
+        }
+      ],
+      "dedup_case": {
+        "eventId": "pzwe_2b3c4d5e6f7a8b9c0d1e2f3a",
+        "why": "Stable across retries — dedupe on it."
+      }
+    }
+  },
+  "cross_scheme_confusion": {
+    "why": "The bug this corpus exists to prevent: 20 of 21 cart plugins read x-payzum-signature (the MASS PAYOUT header) for a payment IPN. Every SDK must fail these.",
+    "cases": [
+      {
+        "name": "mass_payout_header_on_payment_ipn",
+        "scheme": "payment_ipn",
+        "header_used": "X-Payzum-Signature",
+        "expect": "header not found — verification must fail closed, never skip"
+      },
+      {
+        "name": "payment_ipn_verifier_on_mass_payout_body",
+        "body": "{\"eventType\":\"mass_payout.batch_confirmed\",\"eventId\":\"pzwe_2b3c4d5e6f7a8b9c0d1e2f3a\",\"eventAt\":1788000000,\"order\":{\"id\":\"mpo_5c4b3a2f1e0d9c8b7a6f5e4d\",\"chain\":\"bitcoin\",\"mode\":\"mainnet\",\"status\":\"executing\",\"recipientCount\":250}}",
+        "signature": "394e03c19434624033aa6b179db0f5ff81f9249b8c334712ab8dda987797786b",
+        "verify_as": "payment_ipn",
+        "valid": false,
+        "why": "SHA-512 verifier against a SHA-256 signature."
+      }
+    ]
+  }
+}

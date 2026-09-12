@@ -1,0 +1,63 @@
+{
+    "packages": [
+        {
+            "name": "payzum/payzum-php",
+            "version": "v0.1.0",
+            "version_normalized": "0.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/payzum-dev/payzum-php.git",
+                "reference": "c646c948883da1aad21d43d4692791604bc09bbc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/payzum-dev/payzum-php/zipball/c646c948883da1aad21d43d4692791604bc09bbc",
+                "reference": "c646c948883da1aad21d43d4692791604bc09bbc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=8.1"
+            },
+            "time": "2026-08-30T21:24:12+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Payzum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Payzum",
+                    "homepage": "https://payzum.com"
+                }
+            ],
+            "description": "Official PHP SDK for the Payzum crypto payment API — accept stablecoin and crypto payments, verify IPN webhooks.",
+            "homepage": "https://merchant.payzum.com",
+            "keywords": [
+                "USDC",
+                "USDT",
+                "bitcoin",
+                "crypto",
+                "ethereum",
+                "payment-gateway",
+                "payments",
+                "payzum",
+                "stablecoin"
+            ],
+            "support": {
+                "docs": "https://merchant.payzum.com/docs",
+                "issues": "https://github.com/payzum-dev/payzum-php/issues",
+                "source": "https://github.com/payzum-dev/payzum-php"
+            },
+            "install-path": "../payzum/payzum-php"
+        }
+    ],
+    "dev": false,
+    "dev-package-names": []
+}
