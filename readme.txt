@@ -4,7 +4,7 @@ Tags: crypto, stablecoin, payments, fluent forms, usdc
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -45,6 +45,10 @@ notifications. It is required for the gateway to work.
 * Service provider: Payzum — [terms](https://payzum.com/terms), [privacy](https://payzum.com/privacy).
 
 == Changelog ==
+
+= 1.0.1 =
+* The text domain now matches the plugin slug (`payzum-for-fluent-forms`), so translations load.
+* The readme declares the external Payzum API service and is tested against WordPress 7.1.
 
 = 1.0.0 =
 * Initial release.
