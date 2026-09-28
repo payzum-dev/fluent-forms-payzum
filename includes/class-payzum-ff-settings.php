@@ -72,54 +72,54 @@ class Payzum_FF_Settings {
 	/** The admin tab schema for fluentform/payment_methods_global_settings. */
 	public static function globalFields() {
 		return array(
-			'label'  => __( 'Payzum', 'payzum-fluent-forms' ),
+			'label'  => __( 'Payzum', 'payzum-for-fluent-forms' ),
 			'fields' => array(
 				array(
 					'settings_key'   => 'is_active',
 					'type'           => 'yes-no-checkbox',
-					'label'          => __( 'Status', 'payzum-fluent-forms' ),
-					'checkbox_label' => __( 'Enable Payzum (crypto & stablecoin payments — USDC, USDT and more)', 'payzum-fluent-forms' ),
+					'label'          => __( 'Status', 'payzum-for-fluent-forms' ),
+					'checkbox_label' => __( 'Enable Payzum (crypto & stablecoin payments — USDC, USDT and more)', 'payzum-for-fluent-forms' ),
 				),
 				array(
 					'settings_key' => 'api_key',
 					'type'         => 'input-text',
 					'data_type'    => 'password',
-					'label'        => __( 'API key', 'payzum-fluent-forms' ),
-					'info_help'    => __( 'From Dashboard → Settings → API Keys at merchant.payzum.com. The sandbox environment needs its own key.', 'payzum-fluent-forms' ),
+					'label'        => __( 'API key', 'payzum-for-fluent-forms' ),
+					'info_help'    => __( 'From Dashboard → Settings → API Keys at merchant.payzum.com. The sandbox environment needs its own key.', 'payzum-for-fluent-forms' ),
 				),
 				array(
 					'settings_key' => 'webhook_secret',
 					'type'         => 'input-text',
 					'data_type'    => 'password',
-					'label'        => __( 'Webhook secret', 'payzum-fluent-forms' ),
-					'info_help'    => __( 'Shown once, at merchant creation or rotation. Verifies the signature of payment notifications — submissions are marked as paid from those notifications, not from the buyer\'s redirect.', 'payzum-fluent-forms' ),
+					'label'        => __( 'Webhook secret', 'payzum-for-fluent-forms' ),
+					'info_help'    => __( 'Shown once, at merchant creation or rotation. Verifies the signature of payment notifications — submissions are marked as paid from those notifications, not from the buyer\'s redirect.', 'payzum-for-fluent-forms' ),
 				),
 				array(
 					'settings_key' => 'environment',
 					'type'         => 'input-radio',
-					'label'        => __( 'Environment', 'payzum-fluent-forms' ),
+					'label'        => __( 'Environment', 'payzum-for-fluent-forms' ),
 					'options'      => array(
 						array(
 							'value' => 'production',
-							'label' => __( 'Production', 'payzum-fluent-forms' ),
+							'label' => __( 'Production', 'payzum-for-fluent-forms' ),
 						),
 						array(
 							'value' => 'staging',
-							'label' => __( 'Sandbox (staging.payzum.com, separate API keys)', 'payzum-fluent-forms' ),
+							'label' => __( 'Sandbox (staging.payzum.com, separate API keys)', 'payzum-for-fluent-forms' ),
 						),
 					),
 				),
 				array(
 					'settings_key' => 'pay_currency',
 					'type'         => 'input-text',
-					'label'        => __( 'Pay currency', 'payzum-fluent-forms' ),
-					'info_help'    => __( '"all" lets the buyer pick the asset and network on the hosted checkout page (limited to your merchant allowlist). Alternatively a specific code like "usdcmatic".', 'payzum-fluent-forms' ),
+					'label'        => __( 'Pay currency', 'payzum-for-fluent-forms' ),
+					'info_help'    => __( '"all" lets the buyer pick the asset and network on the hosted checkout page (limited to your merchant allowlist). Alternatively a specific code like "usdcmatic".', 'payzum-for-fluent-forms' ),
 				),
 				array(
 					'settings_key'   => 'debug',
 					'type'           => 'yes-no-checkbox',
-					'label'          => __( 'Debug log', 'payzum-fluent-forms' ),
-					'checkbox_label' => __( 'Log gateway events to the WordPress debug log, prefixed [payzum-ff].', 'payzum-fluent-forms' ),
+					'label'          => __( 'Debug log', 'payzum-for-fluent-forms' ),
+					'checkbox_label' => __( 'Log gateway events to the WordPress debug log, prefixed [payzum-ff].', 'payzum-for-fluent-forms' ),
 				),
 			),
 		);

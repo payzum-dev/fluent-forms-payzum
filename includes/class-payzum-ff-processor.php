@@ -67,7 +67,7 @@ class Payzum_FF_Processor extends BaseProcessor {
 			// payments cannot work, and pretending otherwise strands the form.
 			wp_send_json(
 				array(
-					'errors' => __( 'Crypto payment is not available for subscription items. Please choose another payment method.', 'payzum-fluent-forms' ),
+					'errors' => __( 'Crypto payment is not available for subscription items. Please choose another payment method.', 'payzum-for-fluent-forms' ),
 				),
 				423
 			);
@@ -121,7 +121,7 @@ class Payzum_FF_Processor extends BaseProcessor {
 			Payzum_FF_Settings::log( 'invoice creation failed for submission ' . $submission->id . ': ' . $e->getMessage() );
 			wp_send_json(
 				array(
-					'errors' => __( 'Unable to start the crypto payment. Please try again or pick another payment method.', 'payzum-fluent-forms' ),
+					'errors' => __( 'Unable to start the crypto payment. Please try again or pick another payment method.', 'payzum-for-fluent-forms' ),
 				),
 				423
 			);
@@ -137,7 +137,7 @@ class Payzum_FF_Processor extends BaseProcessor {
 			Payzum_FF_Settings::log( 'no invoice_url for submission ' . $submission->id . ' (payment ' . $paymentId . ')' );
 			wp_send_json(
 				array(
-					'errors' => __( 'The payment provider did not return a checkout URL. Please try again later.', 'payzum-fluent-forms' ),
+					'errors' => __( 'The payment provider did not return a checkout URL. Please try again later.', 'payzum-for-fluent-forms' ),
 				),
 				423
 			);
@@ -159,8 +159,8 @@ class Payzum_FF_Processor extends BaseProcessor {
 				'source_id'        => $submission->id,
 				'component'        => 'Payment',
 				'status'           => 'info',
-				'title'            => __( 'Redirect to Payzum', 'payzum-fluent-forms' ),
-				'description'      => __( 'User redirected to the Payzum hosted checkout to complete the payment', 'payzum-fluent-forms' ),
+				'title'            => __( 'Redirect to Payzum', 'payzum-for-fluent-forms' ),
+				'description'      => __( 'User redirected to the Payzum hosted checkout to complete the payment', 'payzum-for-fluent-forms' ),
 			)
 		);
 
@@ -169,7 +169,7 @@ class Payzum_FF_Processor extends BaseProcessor {
 				'nextAction'   => 'payment',
 				'actionName'   => 'normalRedirect',
 				'redirect_url' => $invoiceUrl,
-				'message'      => __( 'You are redirecting to the Payzum secure checkout. Please wait…', 'payzum-fluent-forms' ),
+				'message'      => __( 'You are redirecting to the Payzum secure checkout. Please wait…', 'payzum-for-fluent-forms' ),
 				'result'       => array(
 					'insert_id' => $submission->id,
 				),

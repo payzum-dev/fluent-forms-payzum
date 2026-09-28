@@ -55,10 +55,10 @@ class Payzum_FF_Handler {
 			return array();
 		}
 		if ( in_array( ArrayHelper::get( $settings, 'api_key' ), array( '', null ), true ) ) {
-			$errors['api_key'] = __( 'The API key is required', 'payzum-fluent-forms' );
+			$errors['api_key'] = __( 'The API key is required', 'payzum-for-fluent-forms' );
 		}
 		if ( in_array( ArrayHelper::get( $settings, 'webhook_secret' ), array( '', null ), true ) ) {
-			$errors['webhook_secret'] = __( 'The webhook secret is required — payments are confirmed from signed notifications', 'payzum-fluent-forms' );
+			$errors['webhook_secret'] = __( 'The webhook secret is required — payments are confirmed from signed notifications', 'payzum-for-fluent-forms' );
 		}
 		return $errors;
 	}
@@ -84,15 +84,15 @@ class Payzum_FF_Handler {
 
 	public function pushPaymentMethodToForm( $methods ) {
 		$methods[ $this->key ] = array(
-			'title'        => __( 'Crypto / stablecoin (Payzum)', 'payzum-fluent-forms' ),
+			'title'        => __( 'Crypto / stablecoin (Payzum)', 'payzum-for-fluent-forms' ),
 			'enabled'      => 'yes',
 			'method_value' => $this->key,
 			'settings'     => array(
 				'option_label' => array(
 					'type'     => 'text',
 					'template' => 'inputText',
-					'value'    => __( 'Crypto / stablecoin (USDC, USDT and more)', 'payzum-fluent-forms' ),
-					'label'    => __( 'Method Label', 'payzum-fluent-forms' ),
+					'value'    => __( 'Crypto / stablecoin (USDC, USDT and more)', 'payzum-for-fluent-forms' ),
+					'label'    => __( 'Method Label', 'payzum-for-fluent-forms' ),
 				),
 			),
 		);

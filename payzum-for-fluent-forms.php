@@ -11,7 +11,7 @@
  * Author URI: https://payzum.com
  * License: MIT
  * License URI: https://opensource.org/licenses/MIT
- * Text Domain: payzum-fluent-forms
+ * Text Domain: payzum-for-fluent-forms
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,7 +32,7 @@ add_action( 'fluentform/loaded', function () {
 	if ( ! class_exists( '\FluentForm\App\Modules\Payments\PaymentMethods\BaseProcessor' ) ) {
 		add_action( 'admin_notices', function () {
 			echo '<div class="notice notice-error"><p>';
-			echo esc_html__( 'Payzum for Fluent Forms requires Fluent Forms 6.0 or newer (the version that ships the payments module).', 'payzum-fluent-forms' );
+			echo esc_html__( 'Payzum for Fluent Forms requires Fluent Forms 6.0 or newer (the version that ships the payments module).', 'payzum-for-fluent-forms' );
 			echo '</p></div>';
 		} );
 		return;
